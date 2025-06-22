@@ -8,7 +8,7 @@ import {
 	UpdateUserDTO,
 } from '@/presentation/user/dto/user.dto'
 import { Inject, Injectable } from '@nestjs/common'
-import { ArrayContains, ILike, Repository } from 'typeorm'
+import { ArrayContains, ILike, LessThan, Repository } from 'typeorm'
 
 @Injectable()
 export class UserRepository implements IUserRepository {
@@ -112,6 +112,35 @@ export class UserRepository implements IUserRepository {
 							roles: ArrayContains([filter.roles]),
 						}
 					: {}),
+			},
+			take: filter.pageSize,
+			skip: (filter.pageIndex - 1) * filter.pageSize,
+			order: {
+				[filter.sortBy ? filter.sortBy : 'id']:
+					filter.order === 'asc' ? 'ASC' : 'DESC',
+			},
+		})
+	}
+
+	async getAllUsersInactives(
+		filter: FilterUserDTO,
+	): Promise<[Users[], number]> {
+		const thirtyDaysAgo: Date = new Date()
+		thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+
+		return await this.userRepository.findAndCount({
+			where: {
+				...(filter.firstName
+					? {
+							firstName: ILike(`%${filter.firstName}%`),
+						}
+					: {}),
+				...(filter.roles
+					? {
+							roles: ArrayContains([filter.roles]),
+						}
+					: {}),
+				lastAccess: LessThan(thirtyDaysAgo),
 			},
 			take: filter.pageSize,
 			skip: (filter.pageIndex - 1) * filter.pageSize,

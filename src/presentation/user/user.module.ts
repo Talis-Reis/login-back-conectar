@@ -3,6 +3,7 @@ import { CreateUserService } from '@/application/use-cases/user/services/create-
 import { DeleteUserService } from '@/application/use-cases/user/services/delete-user.service'
 import { GetAllService } from '@/application/use-cases/user/services/get-all.service'
 import GetByIdService from '@/application/use-cases/user/services/get-by-id.service'
+import { GetAllInactivesService } from '@/application/use-cases/user/services/get-inactives.service'
 import { GetUserByEmailService } from '@/application/use-cases/user/services/get-user-by-email.service'
 import { UpdateAccessUserService } from '@/application/use-cases/user/services/update-access-user.service'
 import { UpdatePasswordService } from '@/application/use-cases/user/services/update-password.service'
@@ -29,6 +30,7 @@ const user = {
 		DeleteUserService,
 		GetByIdService,
 		GetAllService,
+		GetAllInactivesService
 	],
 	exports: [
 		CreateUserService,

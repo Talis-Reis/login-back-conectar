@@ -25,4 +25,7 @@ export abstract class IUserRepository {
 	abstract getAllUsers(
 		pagination: PaginationCommonDTO,
 	): Promise<[Users[], number]>
+	abstract getAllUsersInactives(
+		pagination: PaginationCommonDTO,
+	): Promise<[Users[], number]>
 }

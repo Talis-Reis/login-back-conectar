@@ -3,6 +3,7 @@ import { JwtAuthGuard } from '@/application/use-cases/auth/guard/passport/jwt.gu
 import { DeleteUserService } from '@/application/use-cases/user/services/delete-user.service'
 import { GetAllService } from '@/application/use-cases/user/services/get-all.service'
 import GetByIdService from '@/application/use-cases/user/services/get-by-id.service'
+import { GetAllInactivesService } from '@/application/use-cases/user/services/get-inactives.service'
 import { UpdatePasswordService } from '@/application/use-cases/user/services/update-password.service'
 import { UpdatePermissionUserService } from '@/application/use-cases/user/services/update-permission-user.service'
 import { UpdateUserService } from '@/application/use-cases/user/services/update-user.service'
@@ -48,6 +49,7 @@ export class UserController {
 		private readonly removeUserService: DeleteUserService,
 		private readonly getByIdService: GetByIdService,
 		private readonly getAllUsersService: GetAllService,
+		private readonly getAllInactiveUsersService: GetAllInactivesService,
 	) {}
 
 	@Patch('change-user')
@@ -175,5 +177,25 @@ export class UserController {
 		itemsCount: number
 	}> {
 		return await this.getAllUsersService.execute(filter)
+	}
+
+	@Get('inactives')
+	@Roles(RolesEnum.ADMIN)
+	@ApiOperation({ summary: 'Retorna todos os usuários inativos' })
+	@ApiResponse({
+		status: 200,
+		description: 'Success',
+		type: [ResponseUserDTO],
+	})
+	@ApiResponse({ status: 500, description: 'Server Error' })
+	@ApiResponse({ status: 400, description: 'Bad Request' })
+	async getAllInactiveUsers(@Query() filter: FilterUserDTO): Promise<{
+		users: ResponseUserDTO[]
+		totalItens: number
+		pageIndex: number
+		pageSize: number
+		itemsCount: number
+	}> {
+		return await this.getAllInactiveUsersService.execute(filter)
 	}
 }
