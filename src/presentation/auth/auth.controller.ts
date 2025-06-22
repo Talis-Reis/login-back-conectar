@@ -30,7 +30,7 @@ export class AuthController {
 	@Post('signup')
 	@ApiOperation({ summary: 'Adiciona novos usuários' })
 	@ApiResponse({
-		status: 200,
+		status: 202,
 		description: 'Success',
 	})
 	@ApiResponse({ status: 500, description: 'Server Error' })

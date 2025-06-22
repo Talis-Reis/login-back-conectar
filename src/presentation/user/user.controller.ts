@@ -1,12 +1,28 @@
 import { RolesEnum } from '@/application/use-cases/auth/guard/enums/roles.enum'
 import { JwtAuthGuard } from '@/application/use-cases/auth/guard/passport/jwt.guard'
+import { DeleteUserService } from '@/application/use-cases/user/services/delete-user.service'
+import { GetAllService } from '@/application/use-cases/user/services/get-all.service'
+import GetByIdService from '@/application/use-cases/user/services/get-by-id.service'
 import { UpdatePasswordService } from '@/application/use-cases/user/services/update-password.service'
 import { UpdatePermissionUserService } from '@/application/use-cases/user/services/update-permission-user.service'
 import { UpdateUserService } from '@/application/use-cases/user/services/update-user.service'
 import { MessageType } from '@/shared/common/@types/message.type'
 import { ReqType } from '@/shared/common/@types/request.type'
 import { Roles } from '@/shared/common/decorator/roles.decorator'
-import { Body, Controller, Param, Patch, Req, UseGuards } from '@nestjs/common'
+import { PaginationCommonDTO } from '@/shared/common/presentation/dto/pagination.dto'
+import {
+	Body,
+	Controller,
+	Delete,
+	ForbiddenException,
+	Get,
+	Param,
+	ParseIntPipe,
+	Patch,
+	Query,
+	Req,
+	UseGuards,
+} from '@nestjs/common'
 import {
 	ApiBearerAuth,
 	ApiOperation,
@@ -14,6 +30,7 @@ import {
 	ApiTags,
 } from '@nestjs/swagger'
 import {
+	ResponseUserDTO,
 	UpdatePasswordUserDTO,
 	UpdatePermissionsUserDTO,
 	UpdateUserDTO,
@@ -28,6 +45,9 @@ export class UserController {
 		private readonly updatePermissionUserService: UpdatePermissionUserService,
 		private readonly updateUserService: UpdateUserService,
 		private readonly updatePasswordService: UpdatePasswordService,
+		private readonly removeUserService: DeleteUserService,
+		private readonly getByIdService: GetByIdService,
+		private readonly getAllUsersService: GetAllService,
 	) {}
 
 	@Patch('change-user')
@@ -85,5 +105,75 @@ export class UserController {
 			passwords.currentPassword,
 			passwords.newPassword,
 		)
+	}
+
+	@Delete(':id')
+	@Roles(RolesEnum.ADMIN)
+	@ApiOperation({ summary: 'Remove um usuário' })
+	@ApiResponse({
+		status: 200,
+		description: 'Success',
+	})
+	@ApiResponse({ status: 500, description: 'Server Error' })
+	@ApiResponse({ status: 400, description: 'Bad Request' })
+	async removerUser(
+		@Param('id', ParseIntPipe) idUser: number,
+		@Req() req: ReqType,
+	): Promise<MessageType> {
+		if (idUser === req.user.sub) {
+			throw new ForbiddenException('Você não pode remover a si mesmo.')
+		}
+		return await this.removeUserService.execute(idUser)
+	}
+
+	@Get('me')
+	@Roles(RolesEnum.USER, RolesEnum.ADMIN)
+	@ApiOperation({ summary: 'Retorna dados do usuário autenticado' })
+	@ApiResponse({
+		status: 200,
+		description: 'Success',
+		type: ResponseUserDTO,
+	})
+	@ApiResponse({ status: 500, description: 'Server Error' })
+	@ApiResponse({ status: 400, description: 'Bad Request' })
+	async getUserMe(@Req() req: ReqType): Promise<ResponseUserDTO> {
+		const idUser: number = req.user.sub
+		return await this.getByIdService.execute(idUser)
+	}
+
+	@Get(':id')
+	@Roles(RolesEnum.ADMIN)
+	@ApiOperation({ summary: 'Retorna dados de um usuário específico' })
+	@ApiResponse({
+		status: 200,
+		description: 'Success',
+		type: ResponseUserDTO,
+	})
+	@ApiResponse({ status: 500, description: 'Server Error' })
+	@ApiResponse({ status: 400, description: 'Bad Request' })
+	async getUserById(
+		@Param('id', ParseIntPipe) idUser: number,
+	): Promise<ResponseUserDTO> {
+		return await this.getByIdService.execute(idUser)
+	}
+
+	@Get()
+	@Roles(RolesEnum.ADMIN)
+	@ApiOperation({ summary: 'Retorna todos os usuários' })
+	@ApiResponse({
+		status: 200,
+		description: 'Success',
+		type: [ResponseUserDTO],
+	})
+	@ApiResponse({ status: 500, description: 'Server Error' })
+	@ApiResponse({ status: 400, description: 'Bad Request' })
+	async getAllUsers(@Query() pagination: PaginationCommonDTO): Promise<{
+		users: ResponseUserDTO[]
+		totalItens: number
+		pageIndex: number
+		pageSize: number
+		itemsCount: number
+	}> {
+		return await this.getAllUsersService.execute(pagination)
 	}
 }

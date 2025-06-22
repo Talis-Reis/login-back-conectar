@@ -1,5 +1,8 @@
 import { IUserRepository } from '@/application/interfaces/user.inteface'
 import { CreateUserService } from '@/application/use-cases/user/services/create-user.service'
+import { DeleteUserService } from '@/application/use-cases/user/services/delete-user.service'
+import { GetAllService } from '@/application/use-cases/user/services/get-all.service'
+import GetByIdService from '@/application/use-cases/user/services/get-by-id.service'
 import { GetUserByEmailService } from '@/application/use-cases/user/services/get-user-by-email.service'
 import { UpdateAccessUserService } from '@/application/use-cases/user/services/update-access-user.service'
 import { UpdatePasswordService } from '@/application/use-cases/user/services/update-password.service'
@@ -23,6 +26,9 @@ const user = {
 		UpdatePermissionUserService,
 		UpdateUserService,
 		UpdatePasswordService,
+		DeleteUserService,
+		GetByIdService,
+		GetAllService,
 	],
 	exports: [
 		CreateUserService,

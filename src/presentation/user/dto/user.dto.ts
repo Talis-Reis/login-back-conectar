@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
+import { Expose } from 'class-transformer'
 import {
 	ArrayNotEmpty,
 	ArrayUnique,
@@ -11,6 +12,7 @@ import {
 	Matches,
 	MinLength,
 } from 'class-validator'
+import { IsOnlyAdminOrUser } from '../validators/permissions.validator'
 
 export class InputUserDTO {
 	@ApiProperty()
@@ -50,6 +52,10 @@ export class InputUserDTO {
 		each: true,
 		message: "Cada role deve ser uma das seguintes: 'admin' ou 'user'",
 	})
+	@IsOnlyAdminOrUser({
+		message:
+			"O usuário não pode ter as roles 'admin' e 'user' ao mesmo tempo",
+	})
 	roles: string[]
 }
 
@@ -83,6 +89,10 @@ export class UpdatePermissionsUserDTO {
 		each: true,
 		message: "Cada role deve ser uma das seguintes: 'admin' ou 'user'",
 	})
+	@IsOnlyAdminOrUser({
+		message:
+			"O usuário não pode ter as roles 'admin' e 'user' ao mesmo tempo",
+	})
 	roles: string[]
 }
 
@@ -106,4 +116,34 @@ export class UpdatePasswordUserDTO {
 export class UpdateAccessUserDTO {
 	firstAccess: Date
 	lastAccess: Date
+}
+
+export class ResponseUserDTO {
+	@ApiProperty()
+	@Expose()
+	id: number
+
+	@ApiProperty()
+	@Expose()
+	email: string
+
+	@ApiProperty()
+	@Expose()
+	firstName: string
+
+	@ApiProperty()
+	@Expose()
+	lastName: string
+
+	@ApiProperty()
+	@Expose()
+	roles: string[]
+
+	@ApiProperty()
+	@Expose()
+	firstAccess: Date | null
+
+	@ApiProperty()
+	@Expose()
+	lastAccess: Date | null
 }
