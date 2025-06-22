@@ -198,4 +198,20 @@ export class UserController {
 	}> {
 		return await this.getAllUsersService.execute(filter)
 	}
+
+	@Patch(':id')
+	@Roles(RolesEnum.ADMIN)
+	@ApiOperation({ summary: 'Altera dados de um usuário específico' })
+	@ApiResponse({
+		status: 200,
+		description: 'Success',
+	})
+	@ApiResponse({ status: 500, description: 'Server Error' })
+	@ApiResponse({ status: 400, description: 'Bad Request' })
+	async alterarUserById(
+		@Param('id', ParseIntPipe) idUser: number,
+		@Body() user: UpdateUserDTO,
+	): Promise<MessageType> {
+		return await this.updateUserService.execute(idUser, user)
+	}
 }
