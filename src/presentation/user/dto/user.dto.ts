@@ -147,6 +147,10 @@ export class ResponseUserDTO {
 	@ApiProperty()
 	@Expose()
 	lastAccess: Date | null
+
+	@ApiProperty()
+	@Expose()
+	createdAt: Date
 }
 
 export class FilterUserDTO extends PaginationCommonDTO {
@@ -155,11 +159,28 @@ export class FilterUserDTO extends PaginationCommonDTO {
 	@IsString({ message: 'O campo firstName deve ser uma string' })
 	firstName?: string
 
-	@ApiProperty({ required: false})
+	@ApiProperty({ required: false })
 	@IsOptional()
 	@IsString({ message: 'O campo roles deve ser uma string' })
 	@IsIn(['admin', 'user'], {
 		message: "O campo roles deve ser 'admin' ou 'user'",
 	})
 	roles?: string
+
+	@ApiProperty({ required: false })
+	@IsOptional()
+	@IsString({ message: 'O campo sortBy deve ser uma string' })
+	@IsIn(['firstName', 'createdAt'], {
+		message:
+			"O campo sortBy deve ser um dos seguintes: 'firstName' ou 'createdAt'",
+	})
+	sortBy?: string
+
+	@ApiProperty({ required: false })
+	@IsOptional()
+	@IsString({ message: 'O campo order deve ser uma string' })
+	@IsIn(['asc', 'desc'], {
+		message: "O campo order deve ser 'asc' ou 'desc'",
+	})
+	order?: string
 }

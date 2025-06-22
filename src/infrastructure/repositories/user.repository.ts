@@ -116,7 +116,8 @@ export class UserRepository implements IUserRepository {
 			take: filter.pageSize,
 			skip: (filter.pageIndex - 1) * filter.pageSize,
 			order: {
-				id: 'DESC',
+				[filter.sortBy ? filter.sortBy : 'id']:
+					filter.order === 'asc' ? 'ASC' : 'DESC',
 			},
 		})
 	}
