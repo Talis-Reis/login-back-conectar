@@ -16,6 +16,7 @@ export class DataBaseConfig {
 			password: this.envConfig.getDbPassword(),
 			database,
 			entities: [__dirname + '/../../../**/*.entity{.ts,.js}'],
+			logging: ['query'],
 			extra: this.envConfig.getDbSsl()
 				? {
 						ssl: { rejectUnauthorized: false },

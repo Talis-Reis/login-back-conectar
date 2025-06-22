@@ -9,7 +9,6 @@ import { UpdateUserService } from '@/application/use-cases/user/services/update-
 import { MessageType } from '@/shared/common/@types/message.type'
 import { ReqType } from '@/shared/common/@types/request.type'
 import { Roles } from '@/shared/common/decorator/roles.decorator'
-import { PaginationCommonDTO } from '@/shared/common/presentation/dto/pagination.dto'
 import {
 	Body,
 	Controller,
@@ -30,6 +29,7 @@ import {
 	ApiTags,
 } from '@nestjs/swagger'
 import {
+	FilterUserDTO,
 	ResponseUserDTO,
 	UpdatePasswordUserDTO,
 	UpdatePermissionsUserDTO,
@@ -167,13 +167,13 @@ export class UserController {
 	})
 	@ApiResponse({ status: 500, description: 'Server Error' })
 	@ApiResponse({ status: 400, description: 'Bad Request' })
-	async getAllUsers(@Query() pagination: PaginationCommonDTO): Promise<{
+	async getAllUsers(@Query() filter: FilterUserDTO): Promise<{
 		users: ResponseUserDTO[]
 		totalItens: number
 		pageIndex: number
 		pageSize: number
 		itemsCount: number
 	}> {
-		return await this.getAllUsersService.execute(pagination)
+		return await this.getAllUsersService.execute(filter)
 	}
 }

@@ -1,14 +1,14 @@
 import { IUserRepository } from '@/application/interfaces/user.inteface'
 import { Users } from '@/domain/models/users.entity'
 import {
+	FilterUserDTO,
 	InputUserDTO,
 	UpdateAccessUserDTO,
 	UpdatePermissionsUserDTO,
 	UpdateUserDTO,
 } from '@/presentation/user/dto/user.dto'
-import { PaginationCommonDTO } from '@/shared/common/presentation/dto/pagination.dto'
 import { Inject, Injectable } from '@nestjs/common'
-import { Repository } from 'typeorm'
+import { ArrayContains, ILike, Repository } from 'typeorm'
 
 @Injectable()
 export class UserRepository implements IUserRepository {
@@ -99,12 +99,22 @@ export class UserRepository implements IUserRepository {
 		})
 	}
 
-	async getAllUsers(
-		pagination: PaginationCommonDTO,
-	): Promise<[Users[], number]> {
+	async getAllUsers(filter: FilterUserDTO): Promise<[Users[], number]> {
 		return await this.userRepository.findAndCount({
-			take: pagination.pageSize,
-			skip: (pagination.pageIndex - 1) * pagination.pageSize,
+			where: {
+				...(filter.firstName
+					? {
+							firstName: ILike(`%${filter.firstName}%`),
+						}
+					: {}),
+				...(filter.roles
+					? {
+							roles: ArrayContains([filter.roles]),
+						}
+					: {}),
+			},
+			take: filter.pageSize,
+			skip: (filter.pageIndex - 1) * filter.pageSize,
 			order: {
 				id: 'DESC',
 			},

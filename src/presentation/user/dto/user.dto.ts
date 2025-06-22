@@ -1,3 +1,4 @@
+import { PaginationCommonDTO } from '@/shared/common/presentation/dto/pagination.dto'
 import { ApiProperty } from '@nestjs/swagger'
 import { Expose } from 'class-transformer'
 import {
@@ -146,4 +147,19 @@ export class ResponseUserDTO {
 	@ApiProperty()
 	@Expose()
 	lastAccess: Date | null
+}
+
+export class FilterUserDTO extends PaginationCommonDTO {
+	@ApiProperty({ required: false })
+	@IsOptional()
+	@IsString({ message: 'O campo firstName deve ser uma string' })
+	firstName?: string
+
+	@ApiProperty({ required: false})
+	@IsOptional()
+	@IsString({ message: 'O campo roles deve ser uma string' })
+	@IsIn(['admin', 'user'], {
+		message: "O campo roles deve ser 'admin' ou 'user'",
+	})
+	roles?: string
 }
