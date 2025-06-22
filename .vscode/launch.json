@@ -1,0 +1,11 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"command": "./node_modules/.bin/ts-node-dev -r tsconfig-paths/register src/main.ts",
+			"name": "start",
+			"request": "launch",
+			"type": "node-terminal"
+		}
+	]
+}
