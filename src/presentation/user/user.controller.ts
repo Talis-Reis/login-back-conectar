@@ -143,6 +143,26 @@ export class UserController {
 		return await this.getByIdService.execute(idUser)
 	}
 
+	@Get('inactives')
+	@Roles(RolesEnum.ADMIN)
+	@ApiOperation({ summary: 'Retorna todos os usuários inativos' })
+	@ApiResponse({
+		status: 200,
+		description: 'Success',
+		type: [ResponseUserDTO],
+	})
+	@ApiResponse({ status: 500, description: 'Server Error' })
+	@ApiResponse({ status: 400, description: 'Bad Request' })
+	async getAllUsersInactives(@Query() filter: FilterUserDTO): Promise<{
+		users: ResponseUserDTO[]
+		totalItens: number
+		pageIndex: number
+		pageSize: number
+		itemsCount: number
+	}> {
+		return await this.getAllInactiveUsersService.execute(filter)
+	}
+
 	@Get(':id')
 	@Roles(RolesEnum.ADMIN)
 	@ApiOperation({ summary: 'Retorna dados de um usuário específico' })
@@ -177,25 +197,5 @@ export class UserController {
 		itemsCount: number
 	}> {
 		return await this.getAllUsersService.execute(filter)
-	}
-
-	@Get('inactives')
-	@Roles(RolesEnum.ADMIN)
-	@ApiOperation({ summary: 'Retorna todos os usuários inativos' })
-	@ApiResponse({
-		status: 200,
-		description: 'Success',
-		type: [ResponseUserDTO],
-	})
-	@ApiResponse({ status: 500, description: 'Server Error' })
-	@ApiResponse({ status: 400, description: 'Bad Request' })
-	async getAllInactiveUsers(@Query() filter: FilterUserDTO): Promise<{
-		users: ResponseUserDTO[]
-		totalItens: number
-		pageIndex: number
-		pageSize: number
-		itemsCount: number
-	}> {
-		return await this.getAllInactiveUsersService.execute(filter)
 	}
 }
