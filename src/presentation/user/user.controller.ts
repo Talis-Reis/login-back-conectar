@@ -199,7 +199,7 @@ export class UserController {
 		return await this.getAllUsersService.execute(filter)
 	}
 
-	@Patch(':id')
+	@Patch('change-user/:id')
 	@Roles(RolesEnum.ADMIN)
 	@ApiOperation({ summary: 'Altera dados de um usuário específico' })
 	@ApiResponse({
