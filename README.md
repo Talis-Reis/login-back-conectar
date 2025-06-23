@@ -108,6 +108,7 @@ Acesse a documentação Swagger em: [http://localhost:3001/api](http://localhost
 
 ## Estrutura do Projeto
 
+- `src/domain/` — Entidades e regras de negócio
 - `src/application/use-cases/user/services/` — Serviços de negócio dos usuários
 - `src/infrastructure/repositories/` — Repositórios de acesso a dados
 - `src/presentation/user/` — Controllers, DTOs e validações
@@ -119,7 +120,7 @@ Acesse a documentação Swagger em: [http://localhost:3001/api](http://localhost
 
 O projeto segue princípios de arquitetura limpa (Clean Architecture), separando responsabilidades em camadas:
 
-- **Domain:** Entidades e regras de negócio puras.
+- **Domain:** Entidades e regras de negócio.
 - **Application:** Casos de uso (serviços) e interfaces de repositórios.
 - **Infrastructure:** Implementações concretas de repositórios, integração com banco de dados e serviços externos.
 - **Presentation:** Controllers, DTOs, validações e documentação Swagger.
@@ -135,7 +136,3 @@ npm run test
 ```
 
 ---
-
-## Licença
-
-[MIT](LICENSE)
