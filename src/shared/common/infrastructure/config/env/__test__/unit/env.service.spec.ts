@@ -88,10 +88,10 @@ describe('EnvService', () => {
 		expect(envService.getAppPort()).toBe(4000)
 
 		configService.get.mockReturnValueOnce(undefined)
-		expect(envService.getAppPort()).toBe(3000)
+		expect(envService.getAppPort()).toBe(3001)
 
 		configService.get.mockReturnValueOnce('notANumber')
-		expect(envService.getAppPort()).toBe(3000)
+		expect(envService.getAppPort()).toBe(3001)
 	})
 
 	it('getNodeEnv deve retornar valor do config ou padrão', () => {

@@ -18,7 +18,7 @@ COPY .env ./
 RUN npm install --only=development
 
 COPY --from=builder /app/dist/. ./
-EXPOSE 3000
+EXPOSE 3001
 
 COPY .docker/entry.sh /app/entry.sh
 ENTRYPOINT ["sh", "entry.sh"]

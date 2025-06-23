@@ -43,7 +43,7 @@ export class EnvService implements IEnvConfig {
 
 	getAppPort(): number {
 		const port: number = Number(this.configService.get<string>('PORT'))
-		return isNaN(port) ? 3000 : port
+		return isNaN(port) ? 3001 : port
 	}
 
 	getNodeEnv(): string {
