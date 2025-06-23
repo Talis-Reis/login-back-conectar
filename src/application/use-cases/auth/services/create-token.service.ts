@@ -24,7 +24,7 @@ export class CreateTokenService {
 		if (!resultUser)
 			throw new UnauthorizedException('Usuário ou senha incorretos.')
 
-		const { id, email }: { id: number; email: string } = resultUser
+		const { id, email, firstName, lastName }: { id: number; email: string; firstName: string; lastName: string } = resultUser
 
 		const password: boolean = await comparePassword(
 			login.password,
@@ -48,6 +48,8 @@ export class CreateTokenService {
 			jti: randomUUID(),
 			sub: id,
 			email: email,
+			firstName: firstName,
+			lastName: lastName,
 			authorization: authorization,
 		})
 

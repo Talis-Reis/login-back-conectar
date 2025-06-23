@@ -106,7 +106,7 @@ export class UpdatePasswordUserDTO {
 	@ApiProperty()
 	@IsString({ message: 'O campo newPassword deve ser uma string' })
 	@IsNotEmpty({ message: 'O campo newPassword não pode ser vazio' })
-	@MinLength(8)
+	@MinLength(8, { message: 'A senha nova deve ter pelo menos 8 caracteres' })
 	@Matches(/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).+$/, {
 		message:
 			'A senha deve conter pelo menos uma letra maiúscula, um número e um caractere especial',
