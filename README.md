@@ -97,7 +97,9 @@ Acesse a documentação Swagger em: [http://localhost:3001/api](http://localhost
 - `GET /v1/users` — Lista usuários com filtros e paginação
 - `GET /v1/users/inactives` — Lista usuários inativos (sem login nos últimos 30 dias)
 - `GET /v1/users/:id` — Detalhes de um usuário
+- `GET /v1/users/me` — Detalhes do usuário autenticado
 - `PATCH /v1/users/change-user` — Atualiza dados do usuário autenticado
+- `PATCH /v1/users/change-user/:id` — Atualiza dados de um usuário
 - `PATCH /v1/users/:id/permissions` — Atualiza permissões (admin, user)
 - `PATCH /v1/users/change-password` — Altera senha do usuário autenticado
 - `DELETE /v1/users/:id` — Remove um usuário
